@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نُطق — منصة التواصل التعليمي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c1:#1a2a4a; --c2:#1e3a6e; --c3:#2a5298;
+  --c4:#3a8fa0; --c5:#4db8cc; --c6:#b2e4ec; --c7:#eef7f9;
+  --blue:#2a5298; --bg:#f0f5fb; --white:#fff;
+  --text:#1a2a4a; --text2:#3a5080; --text3:#7090b0;
+  --border:#ccdde8; --red:#e05252; --green:#38a169; --amber:#d97706;
+  --shadow:0 4px 24px rgba(26,42,74,.12);
+  --r:14px; --r2:20px; --r3:28px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:50}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:1.3rem;font-weight:900;color:var(--c1)}
+.nav-logo svg{width:36px;height:34px}
+.nav-center{display:flex;gap:4px}
+.nav-tab{padding:7px 18px;border-radius:50px;font-size:.9rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text2);font-family:'Tajawal',sans-serif;transition:all .2s}
+.nav-tab.active{background:var(--c7);color:var(--c2);font-weight:700}
+.nav-tab:hover:not(.active){background:var(--c7);color:var(--c2)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.user-badge{display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--c7);border-radius:50px;font-size:.85rem;font-weight:600;color:var(--c2)}
+.user-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.role-switch{display:flex;gap:4px;background:var(--border);border-radius:50px;padding:3px}
+.role-btn{padding:5px 14px;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;border:none;font-family:'Tajawal',sans-serif;transition:all .2s;color:var(--text2);background:transparent}
+.role-btn.active{background:var(--white);color:var(--c2);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+
+/* ── MAIN LAYOUT ── */
+.app{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{width:240px;background:var(--white);border-left:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-section{padding:16px 16px 8px;font-size:.7rem;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;transition:all .2s;border-radius:0;font-size:.9rem;font-weight:500;color:var(--text2);border:none;background:transparent;width:100%;font-family:'Tajawal',sans-serif;text-align:right}
+.sidebar-item svg{width:18px;height:18px;flex-shrink:0;opacity:.7}
+.sidebar-item:hover{background:var(--c7);color:var(--c2)}
+.sidebar-item.active{background:var(--c7);color:var(--c2);font-weight:700;border-right:3px solid var(--c3)}
+.sidebar-item.active svg{opacity:1}
+.sidebar-badge{margin-right:auto;background:var(--c3);color:white;border-radius:50px;font-size:.65rem;font-weight:700;padding:2px 7px}
+.sidebar-divider{height:1px;background:var(--border);margin:8px 16px}
+
+/* ── CONTENT ── */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── PAGES ── */
+.page{display:none;flex:1;overflow:hidden}
+.page.active{display:flex;flex-direction:column}
+
+/* ════════════ SESSION PAGE ════════════ */
+.session-layout{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto;gap:16px;padding:16px;flex:1;overflow:hidden}
+
+.video-panel{background:var(--c1);border-radius:var(--r2);overflow:hidden;position:relative;display:flex;flex-direction:column}
+.video-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(0,0,0,.3)}
+.video-label{font-size:.85rem;font-weight:700;color:rgba(255,255,255,.9);display:flex;align-items:center;gap:8px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.video-body{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+video,canvas{border-radius:0;width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.video-placeholder{display:flex;flex-direction:column;align-items:center;gap:14px;color:rgba(255,255,255,.5);z-index:2;position:relative}
+.video-placeholder svg{width:56px;height:56px;opacity:.4}
+
+/* translation overlay */
+.translation-overlay{position:absolute;bottom:0;left:0;right:0;padding:14px 18px;background:linear-gradient(transparent,rgba(0,0,0,.75));z-index:10}
+.translation-text{color:white;font-size:1rem;font-weight:600;min-height:24px;line-height:1.5}
+.translation-label{font-size:.7rem;color:var(--c5);margin-bottom:4px;font-weight:600}
+
+/* detection box overlay */
+.detection-box{position:absolute;border:2px solid var(--c4);border-radius:8px;z-index:5;pointer-events:none;transition:all .3s;display:none}
+.detection-box.visible{display:block}
+.detection-label{position:absolute;top:-22px;right:0;background:var(--c3);color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:4px;font-family:'Tajawal',sans-serif;white-space:nowrap}
+
+/* wave bars for audio */
+.wave-bars{display:flex;align-items:center;gap:3px;height:28px}
+.wave-bar{width:4px;border-radius:2px;background:var(--c4);transform:scaleY(.3);transition:transform .1s}
+
+/* ── CHAT / TEXT PANEL ── */
+.text-panel{background:var(--white);border-radius:var(--r2);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border)}
+.panel-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.panel-title{font-size:.95rem;font-weight:800;color:var(--c1)}
+.panel-actions{display:flex;gap:8px}
+.icon-btn{width:32px;height:32px;border-radius:8px;background:var(--c7);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.icon-btn:hover{background:var(--c6)}
+.icon-btn svg{width:16px;height:16px}
+
+/* messages */
+.messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{display:flex;flex-direction:column;gap:4px;max-width:85%;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg.me{align-self:flex-end;align-items:flex-end}
+.msg.them{align-self:flex-start;align-items:flex-start}
+.msg-bubble{padding:10px 14px;border-radius:16px;font-size:.9rem;line-height:1.6}
+.msg.me .msg-bubble{background:linear-gradient(135deg,var(--c2),var(--c3));color:white;border-bottom-left-radius:4px}
+.msg.them .msg-bubble{background:var(--c7);color:var(--text);border-bottom-right-radius:4px}
+.msg-meta{font-size:.7rem;color:var(--text3);display:flex;align-items:center;gap:6px}
+.msg-type{padding:2px 7px;border-radius:50px;font-size:.6rem;font-weight:700}
+.type-sign{background:#e8f4f0;color:var(--c2)}
+.type-voice{background:#e8f0ff;color:var(--blue)}
+.type-text{background:var(--c7);color:var(--text2)}
+
+/* input bar */
+.input-bar{padding:14px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-shrink:0}
+.text-input{flex:1;padding:10px 16px;border-radius:50px;border:1.5px solid var(--border);font-family:'Tajawal',sans-serif;font-size:.9rem;outline:none;background:var(--bg);color:var(--text);transition:border .2s}
+.text-input:focus{border-color:var(--c3)}
+.send-btn{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--c2),var(--c3));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.send-btn:hover{transform:scale(1.05);box-shadow:0 4px 14px rgba(45,110,110,.35)}
+.send-btn svg{width:18px;height:18px;fill:white}
+.mic-btn{width:42px;height:42px;border-radius:50%;background:var(--c7);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.mic-btn.recording{background:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(224,82,82,.4)}50%{box-shadow:0 0 0 8px rgba(224,82,82,0)}}
+.mic-btn svg{width:18px;height:18px}
+
+/* controls bar */
+.controls-bar{grid-column:1/-1;background:var(--white);border-radius:var(--r2);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--border)}
+.ctrl-group{display:flex;gap:10px;align-items:center}
+.ctrl-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:50px;border:none;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:.85rem;font-weight:600;transition:all .2s}
+.ctrl-btn-primary{background:linear-gradient(135deg,var(--c2),var(--c3));color:white}
+.ctrl-btn-primary:hover{box-shadow:0 4px 16px rgba(45,110,110,.35);transform:translateY(-1px)}
+.ctrl-btn-danger{background:#fee2e2;color:var(--red)}
+.ctrl-btn-danger:hover{background:#fecaca}
+.ctrl-btn-default{background:var(--c7);color:var(--c2)}
+.ctrl-btn-default:hover{background:var(--c6)}
+.ctrl-btn svg{width:16px;height:16px}
+.status-indicator{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;color:var(--text2)}
+.status-dot{width:10px;height:10px;border-radius:50%}
+.status-dot.connected{background:var(--green)}
+.status-dot.disconnected{background:var(--text3)}
+.status-dot.recording-status{background:var(--red);animation:blink 1s infinite}
+
+/* ════════════ DICTIONARY PAGE ════════════ */
+.dict-page{padding:24px;overflow-y:auto;flex:1}
+.dict-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap}
+.search-box{display:flex;align-items:center;gap:10px;background:var(--white);border:1.5px solid var(--border);border-radius:50px;padding:10px 18px;width:340px;transition:border .2s}
+.search-box:focus-within{border-color:var(--c3)}
+.search-box input{border:none;outline:none;font-family:'Tajawal',sans-serif;font-size:.9rem;background:transparent;flex:1;color:var(--text)}
+.search-box svg{width:18px;height:18px;opacity:.5;flex-shrink:0}
+.dict-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.cat-chip{padding:7px 16px;border-radius:50px;border:1.5px solid var(--border);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;background:var(--white);color:var(--text2);font-family:'Tajawal',sans-serif}
+.cat-chip.active{background:var(--c2);color:white;border-color:var(--c2)}
+.cat-chip:hover:not(.active){background:var(--c7);border-color:var(--c4)}
+.dict-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.dict-card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:18px;text-align:center;cursor:pointer;transition:all .25s;position:relative}
+.dict-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--c4)}
+.dict-hand-area{width:90px;height:90px;background:var(--c7);border-radius:14px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+.dict-hand-area svg{width:52px;height:52px}
+.dict-word-ar{font-size:1.15rem;font-weight:800;color:var(--c1);margin-bottom:4px}
+.dict-cat-tag{font-size:.7rem;font-weight:600;color:var(--c3);background:var(--c7);padding:3px 9px;border-radius:50px}
+.dict-play{position:absolute;top:10px;left:10px;width:28px;height:28px;border-radius:50%;background:var(--c3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.dict-card:hover .dict-play{opacity:1}
+.dict-play svg{width:12px;height:12px;fill:white}
+
+/* ════════════ QUIZ PAGE ════════════ */
+.quiz-page{padding:24px;overflow-y:auto;flex:1}
+.quiz-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.quiz-progress-bar{height:8px;background:var(--c6);border-radius:50px;flex:1;margin:0 20px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:linear-gradient(90deg,var(--c3),var(--c4));border-radius:50px;transition:width .4s ease}
+.quiz-card{background:var(--white);border-radius:var(--r2);padding:36px;max-width:720px;margin:0 auto;border:1px solid var(--border);box-shadow:var(--shadow)}
+.quiz-question{font-size:1.2rem;font-weight:700;color:var(--c1);margin-bottom:28px;text-align:center}
+.quiz-hand-display{width:180px;height:180px;background:var(--c7);border-radius:20px;margin:0 auto 28px;display:flex;align-items:center;justify-content:center}
+.quiz-hand-display svg{width:110px;height:110px}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quiz-opt{padding:16px;border-radius:var(--r);border:2px solid var(--border);background:var(--white);font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;color:var(--text)}
+.quiz-opt:hover{border-color:var(--c4);background:var(--c7)}
+.quiz-opt.correct{border-color:var(--green);background:#f0fff4;color:var(--green)}
+.quiz-opt.wrong{border-color:var(--red);background:#fff0f0;color:var(--red)}
+.quiz-result{text-align:center;padding:40px}
+.quiz-score{font-size:4rem;font-weight:900;color:var(--c2)}
+.quiz-score-label{font-size:1rem;color:var(--text2);margin-top:8px}
+
+/* ════════════ RECORDINGS PAGE ════════════ */
+.recordings-page{padding:24px;overflow-y:auto;flex:1}
+.rec-list{display:flex;flex-direction:column;gap:12px;max-width:800px}
+.rec-item{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:16px;transition:all .2s}
+.rec-item:hover{box-shadow:var(--shadow);border-color:var(--c4)}
+.rec-icon{width:44px;height:44px;border-radius:12px;background:var(--c7);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rec-icon svg{width:22px;height:22px}
+.rec-info{flex:1}
+.rec-title{font-weight:700;color:var(--c1);margin-bottom:3px}
+.rec-meta{font-size:.8rem;color:var(--text3)}
+.rec-text-preview{font-size:.85rem;color:var(--text2);margin-top:6px;line-height:1.5;background:var(--c7);padding:8px 12px;border-radius:8px}
+.rec-actions{display:flex;gap:8px}
+
+/* ════════════ SETTINGS PAGE ════════════ */
+.settings-page{padding:24px;overflow-y:auto;flex:1}
+.settings-section{background:var(--white);border-radius:var(--r2);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.settings-section-title{padding:16px 20px;font-weight:800;color:var(--c1);border-bottom:1px solid var(--border);font-size:.95rem}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-weight:600;color:var(--text);font-size:.9rem}
+.setting-desc{font-size:.8rem;color:var(--text3);margin-top:2px}
+.toggle{width:44px;height:24px;background:var(--border);border-radius:50px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--c3)}
+.toggle::after{content:'';position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle.on::after{transform:translateX(-20px)}
+.setting-select{padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);font-family:'Tajawal',sans-serif;font-size:.85rem;background:var(--bg);color:var(--text);outline:none}
+.setting-select:focus{border-color:var(--c3)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--c1);color:white;padding:12px 24px;border-radius:50px;font-size:.9rem;font-weight:600;z-index:999;transition:transform .3s ease;pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:var(--r2);padding:32px;max-width:500px;width:90%;text-align:center}
+.modal h3{font-size:1.3rem;font-weight:800;color:var(--c1);margin-bottom:12px}
+.modal p{color:var(--text2);margin-bottom:24px;line-height:1.7}
+.modal-actions{display:flex;gap:12px;justify-content:center}
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--c6);border-radius:3px}
+
+/* responsive */
+@media(max-width:768px){
+  .session-layout{grid-template-columns:1fr;grid-template-rows:auto auto auto}
+  .sidebar{display:none}
+  .dict-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── status bar top of video ── */
+.cam-status{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);color:white;font-size:.75rem;font-weight:600;padding:4px 12px;border-radius:50px;z-index:10;white-space:nowrap;backdrop-filter:blur(4px)}
+
+/* loading spinner */
+.spinner{width:24px;height:24px;border:3px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- ══════════ NAVBAR ══════════ -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 48 44" fill="none">
+      <defs>
+        <linearGradient id="nl1" x1="0" y1="0" x2="48" y2="44" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1a2a4a"/><stop offset="100%" stop-color="#2a5298"/></linearGradient>
+        <linearGradient id="nl2" x1="28" y1="8" x2="48" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3a8fa0"/><stop offset="100%" stop-color="#4db8cc"/></linearGradient>
+      </defs>
+      <rect x="8" y="16" width="16" height="22" rx="4" fill="url(#nl1)"/>
+      <rect x="2" y="20" width="8" height="10" rx="4" fill="url(#nl1)"/>
+      <rect x="12" y="6" width="6" height="14" rx="3" fill="url(#nl1)"/>
+      <rect x="19" y="5" width="6" height="15" rx="3" fill="url(#nl1)"/>
+      <rect x="26" y="8" width="5" height="12" rx="2.5" fill="url(#nl1)" opacity=".6"/>
+      <path d="M30 18 Q35 22 30 26" stroke="url(#nl2)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <path d="M33 15 Q40 22 33 29" stroke="url(#nl2)" stroke-width="1.7" stroke-linecap="round" fill="none" opacity=".65"/>
+      <path d="M36 12 Q45 22 36 32" stroke="url(#nl2)" stroke-width="1.2" stroke-linecap="round" fill="none" opacity=".35"/>
+    </svg>
+    نُطق
+  </div>
+  <div class="nav-center">
+    <button class="nav-tab active" onclick="goPage('session',this)">🎥 جلسة التواصل</button>
+    <button class="nav-tab" onclick="goPage('dictionary',this)">📖 قاموس الإشارة</button>
+    <button class="nav-tab" onclick="goPage('quiz',this)">✏️ اختبر نفسك</button>
+    <button class="nav-tab" onclick="goPage('recordings',this)">💾 المحفوظات</button>
+    <button class="nav-tab" onclick="goPage('settings',this)">⚙️ الإعدادات</button>
+  </div>
+  <div class="nav-right">
+    <div class="role-switch">
+      <button class="role-btn active" id="roleStudent" onclick="setRole('student')">طالب</button>
+      <button class="role-btn" id="roleDoctor" onclick="setRole('doctor')">دكتور</button>
+    </div>
+    <div class="user-badge"><div class="user-dot"></div><span id="userName">محمد العمري</span></div>
+  </div>
+</nav>
+
+<!-- ══════════ APP ══════════ -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">التواصل</div>
+    <button class="sidebar-item active" onclick="goPage('session',null,this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21l4-4 4 4M12 17v4"/></svg>
+      جلسة مباشرة
+    </button>
+    <button class="sidebar-item" onclick="goPage('recordings',null,this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15V6l-8 4.5L5 6v9a2 2 0 002 2h12a2 2 0 002-2z"/></svg>
+      المحفوظات
+      <span class="sidebar-badge">3</span>
+    </button>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">التعلم</div>
+    <button class="sidebar-item" onclick="goPage('dictionary',null,this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z"/></svg>
+      قاموس الإشارة
+    </button>
+    <button class="sidebar-item" onclick="goPage('quiz',null,this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+      اختبر نفسك
+    </button>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">الحساب</div>
+    <button class="sidebar-item" onclick="goPage('settings',null,this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      الإعدادات
+    </button>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ════ PAGE: SESSION ════ -->
+    <div class="page active" id="page-session">
+      <div class="session-layout">
+
+        <!-- Camera / Sign Detection -->
+        <div class="video-panel">
+          <div class="video-header">
+            <div class="video-label">
+              <div class="live-dot" id="camLiveDot" style="background:#888"></div>
+              <span id="camLiveLabel">الكاميرا — لغة الإشارة</span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <div class="wave-bars" id="signBars">
+                <div class="wave-bar" style="height:8px"></div>
+                <div class="wave-bar" style="height:16px"></div>
+                <div class="wave-bar" style="height:12px"></div>
+                <div class="wave-bar" style="height:20px"></div>
+                <div class="wave-bar" style="height:10px"></div>
+                <div class="wave-bar" style="height:18px"></div>
+                <div class="wave-bar" style="height:14px"></div>
+              </div>
+            </div>
+          </div>
+          <div class="video-body">
+            <video id="camVideo" autoplay muted playsinline style="display:none"></video>
+            <canvas id="camCanvas" style="display:none"></canvas>
+            <div class="video-placeholder" id="camPlaceholder">
+              <svg viewBox="0 0 64 64" fill="none"><rect x="8" y="18" width="48" height="34" rx="6" stroke="rgba(255,255,255,.4)" stroke-width="2"/><circle cx="32" cy="35" r="10" stroke="rgba(255,255,255,.4)" stroke-width="2"/><path d="M44 18l6-6" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linecap="round"/></svg>
+              <div style="font-size:.9rem;text-align:center">اضغط <b>تشغيل الكاميرا</b><br>لبدء كشف الإشارة</div>
+            </div>
+            <!-- detection box -->
+            <div class="detection-box" id="detectionBox">
+              <div class="detection-label" id="detectionLabel">يُحلَّل...</div>
+            </div>
+            <!-- translation overlay -->
+            <div class="translation-overlay">
+              <div class="translation-label">🤟 ترجمة الإشارة</div>
+              <div class="translation-text" id="signTranslation">في انتظار الإشارة...</div>
+            </div>
+            <div class="cam-status" id="camStatus" style="display:none"></div>
+          </div>
+        </div>
+
+        <!-- Speech to text / Chat -->
+        <div class="text-panel">
+          <div class="panel-header">
+            <div class="panel-title">💬 التواصل النصي والصوتي</div>
+            <div class="panel-actions">
+              <button class="icon-btn" title="حفظ المحادثة" onclick="saveConversation()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+              </button>
+              <button class="icon-btn" title="مسح المحادثة" onclick="clearChat()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6m5 0V4a1 1 0 011-1h2a1 1 0 011 1v2"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="messages" id="messages">
+            <div class="msg them">
+              <div class="msg-bubble">مرحباً بكم في جلسة نُطق! يمكنكم التواصل بالإشارة أو الصوت أو الكتابة</div>
+              <div class="msg-meta"><span>نُطق</span><span class="msg-type type-text">نص</span><span>الآن</span></div>
+            </div>
+          </div>
+          <div class="input-bar">
+            <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="تسجيل صوتي">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
+            </button>
+            <input class="text-input" id="chatInput" placeholder="اكتب رسالة..." onkeydown="if(event.key==='Enter')sendMessage()">
+            <button class="send-btn" onclick="sendMessage()">
+              <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-bar">
+          <div class="ctrl-group">
+            <button class="ctrl-btn ctrl-btn-primary" id="camBtn" onclick="toggleCamera()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              تشغيل الكاميرا
+            </button>
+            <button class="ctrl-btn ctrl-btn-default" id="speechBtn" onclick="toggleSpeechRecognition()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4"/></svg>
+              تحويل الصوت لنص
+            </button>
+            <button class="ctrl-btn ctrl-btn-default" onclick="speakLastMessage()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19 11,5"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"/></svg>
+              قراءة الرسالة
+            </button>
+          </div>
+          <div class="status-indicator">
+            <div class="status-dot disconnected" id="statusDot"></div>
+            <span id="statusText">في انتظار البدء</span>
+          </div>
+          <div class="ctrl-group">
+            <button class="ctrl-btn ctrl-btn-default" onclick="saveConversation()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/></svg>
+              حفظ الجلسة
+            </button>
+            <button class="ctrl-btn ctrl-btn-danger" onclick="endSession()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              إنهاء الجلسة
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PAGE: DICTIONARY ════ -->
+    <div class="page" id="page-dictionary">
+      <div class="dict-page">
+        <div class="dict-top" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+          <div>
+            <h2 style="color:var(--c1);font-weight:900">📖 قاموس لغة الإشارة السعودية</h2>
+            <p style="color:var(--text3);font-size:.9rem;margin-top:4px">+8,000 إشارة — ابحث أو تصفح حسب الفئة</p>
+          </div>
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input id="dictSearch" placeholder="ابحث عن كلمة..." oninput="filterDict()">
+          </div>
+        </div>
+        <div class="dict-cats">
+          <button class="cat-chip active" onclick="filterDictCat('all',this)">الكل</button>
+          <button class="cat-chip" onclick="filterDictCat('greetings',this)">تحيات</button>
+          <button class="cat-chip" onclick="filterDictCat('numbers',this)">أرقام</button>
+          <button class="cat-chip" onclick="filterDictCat('letters',this)">حروف</button>
+          <button class="cat-chip" onclick="filterDictCat('education',this)">تعليم</button>
+          <button class="cat-chip" onclick="filterDictCat('emotions',this)">مشاعر</button>
+          <button class="cat-chip" onclick="filterDictCat('daily',this)">يومي</button>
+        </div>
+        <div class="dict-grid" id="dictGrid"></div>
+      </div>
+    </div>
+
+    <!-- ════ PAGE: QUIZ ════ -->
+    <div class="page" id="page-quiz">
+      <div class="quiz-page">
+        <div class="quiz-header-row">
+          <div style="font-weight:800;color:var(--c1);font-size:1.1rem">✏️ اختبر نفسك في لغة الإشارة</div>
+          <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgress" style="width:0%"></div></div>
+          <div style="font-size:.9rem;color:var(--text2);font-weight:600" id="quizCounter">سؤال 1 من 10</div>
+        </div>
+        <div id="quizContent"></div>
+      </div>
+    </div>
+
+    <!-- ════ PAGE: RECORDINGS ════ -->
+    <div class="page" id="page-recordings">
+      <div class="recordings-page">
+        <h2 style="color:var(--c1);font-weight:900;margin-bottom:20px">💾 الجلسات المحفوظة</h2>
+        <div class="rec-list" id="recList">
+          <div style="color:var(--text3);text-align:center;padding:60px 0;font-size:.95rem">لا توجد محفوظات بعد — أنهِ جلسة وسيتم حفظها هنا</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PAGE: SETTINGS ════ -->
+    <div class="page" id="page-settings">
+      <div class="settings-page">
+        <h2 style="color:var(--c1);font-weight:900;margin-bottom:20px">⚙️ الإعدادات</h2>
+        <div class="settings-section">
+          <div class="settings-section-title">إعدادات الكاميرا والصوت</div>
+          <div class="setting-row">
+            <div><div class="setting-label">تشغيل الكاميرا تلقائياً</div><div class="setting-desc">عند فتح صفحة الجلسة</div></div>
+            <div class="toggle" id="toggleAutoCamera" onclick="toggleSetting(this)"></div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">كشف الإشارة المستمر</div><div class="setting-desc">يحلل الإشارات باستمرار</div></div>
+            <div class="toggle on" id="toggleSignDetect" onclick="toggleSetting(this)"></div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">الحساسية</div></div>
+            <select class="setting-select"><option>عالية</option><option selected>متوسطة</option><option>منخفضة</option></select>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">إعدادات تحويل الصوت</div>
+          <div class="setting-row">
+            <div><div class="setting-label">لغة التعرف على الصوت</div></div>
+            <select class="setting-select" id="speechLang"><option value="ar-SA" selected>العربية (السعودية)</option><option value="en-US">English</option></select>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">إرسال تلقائي بعد التعرف</div><div class="setting-desc">يرسل النص فوراً بعد انتهاء الكلام</div></div>
+            <div class="toggle on" id="toggleAutoSend" onclick="toggleSetting(this)"></div>
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">قراءة الرسائل صوتياً</div><div class="setting-desc">للمستخدم الأصم — يقرأ ردود الدكتور</div></div>
+            <div class="toggle" id="toggleTTS" onclick="toggleSetting(this)"></div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-title">الملف الشخصي</div>
+          <div class="setting-row">
+            <div><div class="setting-label">الاسم</div></div>
+            <input style="padding:7px 14px;border-radius:8px;border:1.5px solid var(--border);font-family:'Tajawal',sans-serif;font-size:.9rem;background:var(--bg);color:var(--text);outline:none;width:200px" id="settingName" value="محمد العمري" onchange="updateName()">
+          </div>
+          <div class="setting-row">
+            <div><div class="setting-label">الدور</div></div>
+            <select class="setting-select" onchange="setRole(this.value==='طالب'?'student':'doctor')"><option>طالب</option><option>دكتور</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- content -->
+</div><!-- app -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">إنهاء الجلسة</h3>
+    <p id="modalBody">هل تريد حفظ المحادثة قبل الإنهاء؟</p>
+    <div class="modal-actions">
+      <button class="ctrl-btn ctrl-btn-primary" onclick="confirmSaveEnd()">حفظ وإنهاء</button>
+      <button class="ctrl-btn ctrl-btn-danger" onclick="confirmEnd()">إنهاء بدون حفظ</button>
+      <button class="ctrl-btn ctrl-btn-default" onclick="closeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let role = 'student';
+let camActive = false;
+let micActive = false;
+let speechActive = false;
+let mediaStream = null;
+let recognition = null;
+let signInterval = null;
+let currentPage = 'session';
+let sessions = JSON.parse(localStorage.getItem('nutq_sessions') || '[]');
+let chatLog = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+// ══════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════
+function goPage(name, navBtn, sideBtn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  currentPage = name;
+
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+
+  if (navBtn) navBtn.classList.add('active');
+  if (sideBtn) sideBtn.classList.add('active');
+
+  if (name === 'dictionary') renderDict();
+  if (name === 'quiz') startQuiz();
+  if (name === 'recordings') renderRecordings();
+}
+
+// ══════════════════════════════════════
+//  ROLE
+// ══════════════════════════════════════
+function setRole(r) {
+  role = r;
+  document.getElementById('roleStudent').classList.toggle('active', r === 'student');
+  document.getElementById('roleDoctor').classList.toggle('active', r === 'doctor');
+  document.getElementById('userName').textContent = r === 'student' ? 'محمد العمري' : 'د. نورة الشمري';
+  toast(r === 'student' ? 'تم التبديل لحساب الطالب' : 'تم التبديل لحساب الدكتور');
+}
+
+// ══════════════════════════════════════
+//  CAMERA
+// ══════════════════════════════════════
+async function toggleCamera() {
+  if (camActive) {
+    stopCamera();
+  } else {
+    await startCamera();
+  }
+}
+
+async function startCamera() {
+  try {
+    const btn = document.getElementById('camBtn');
+    btn.innerHTML = '<div class="spinner"></div> جاري التشغيل...';
+    btn.disabled = true;
+
+    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 480 }, audio: false });
+    const video = document.getElementById('camVideo');
+    video.srcObject = mediaStream;
+    video.style.display = 'block';
+    document.getElementById('camPlaceholder').style.display = 'none';
+    camActive = true;
+
+    document.getElementById('camLiveDot').style.background = '#ef4444';
+    document.getElementById('camLiveLabel').textContent = 'الكاميرا — تحليل الإشارة 🟢';
+    document.getElementById('camStatus').style.display = 'block';
+    document.getElementById('camStatus').textContent = '✅ الكاميرا تعمل — يتم تحليل الإشارات';
+
+    btn.className = 'ctrl-btn ctrl-btn-danger';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> إيقاف الكاميرا';
+    btn.disabled = false;
+
+    updateStatus('الكاميرا تعمل', 'connected');
+    startSignDetection();
+    toast('✅ الكاميرا تعمل — جاهز لكشف الإشارة');
+  } catch (e) {
+    document.getElementById('camBtn').className = 'ctrl-btn ctrl-btn-primary';
+    document.getElementById('camBtn').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> تشغيل الكاميرا';
+    document.getElementById('camBtn').disabled = false;
+    toast('⚠️ تعذّر الوصول للكاميرا — تحقق من الصلاحيات');
+  }
+}
+
+function stopCamera() {
+  if (mediaStream) { mediaStream.getTracks().forEach(t => t.stop()); mediaStream = null; }
+  const video = document.getElementById('camVideo');
+  video.style.display = 'none';
+  document.getElementById('camPlaceholder').style.display = 'flex';
+  document.getElementById('camStatus').style.display = 'none';
+  document.getElementById('camLiveDot').style.background = '#888';
+  document.getElementById('camLiveLabel').textContent = 'الكاميرا — لغة الإشارة';
+  document.getElementById('detectionBox').classList.remove('visible');
+  document.getElementById('signTranslation').textContent = 'في انتظار الإشارة...';
+  if (signInterval) { clearInterval(signInterval); signInterval = null; }
+  camActive = false;
+  const btn = document.getElementById('camBtn');
+  btn.className = 'ctrl-btn ctrl-btn-primary';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> تشغيل الكاميرا';
+  updateStatus('في انتظار البدء', 'disconnected');
+}
+
+// ══════════════════════════════════════
+//  SIMULATED SIGN DETECTION
+// (In production: replace with ML model like MediaPipe + custom classifier)
+// ══════════════════════════════════════
+const signPhrases = [
+  'أحتاج مساعدة','شكراً جزيلاً','لم أفهم','أعد من فضلك',
+  'نعم، فهمت','هل يمكنك التوضيح؟','ما معنى هذا؟','أستاذ لدي سؤال',
+  'صباح الخير','كيف حالك؟','أنا بخير','هل الامتحان غداً؟',
+  'الدرس واضح','أريد الإجابة','شكراً للشرح'
+];
+
+let signPhraseIdx = 0;
+function startSignDetection() {
+  animateBars();
+  signInterval = setInterval(() => {
+    if (!camActive) return;
+    // Simulate detection box
+    const box = document.getElementById('detectionBox');
+    const video = document.getElementById('camVideo');
+    const vw = video.clientWidth, vh = video.clientHeight;
+    const bw = 140 + Math.random()*60, bh = 160 + Math.random()*60;
+    const bx = 20 + Math.random()*(vw - bw - 40);
+    const by = 20 + Math.random()*(vh - bh - 40);
+    box.style.width = bw+'px'; box.style.height = bh+'px';
+    box.style.left = bx+'px'; box.style.top = by+'px';
+    box.classList.add('visible');
+
+    // Simulate translation
+    const phrase = signPhrases[signPhraseIdx % signPhrases.length];
+    signPhraseIdx++;
+    document.getElementById('detectionLabel').textContent = 'إشارة محددة';
+    document.getElementById('signTranslation').textContent = phrase;
+
+    // Auto-add to chat
+    addMessage(phrase, 'them', 'sign');
+  }, 7000);
+}
+
+function animateBars() {
+  const bars = document.querySelectorAll('#signBars .wave-bar');
+  setInterval(() => {
+    if (!camActive) { bars.forEach(b => b.style.transform = 'scaleY(.3)'); return; }
+    bars.forEach(b => { b.style.transform = `scaleY(${.2 + Math.random()*.9})`; });
+  }, 120);
+}
+
+// ══════════════════════════════════════
+//  SPEECH RECOGNITION
+// ══════════════════════════════════════
+function toggleSpeechRecognition() {
+  if (speechActive) { stopSpeech(); } else { startSpeech(); }
+}
+
+function startSpeech() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { toast('⚠️ المتصفح لا يدعم التعرف على الصوت — جرب Chrome'); return; }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = document.getElementById('speechLang')?.value || 'ar-SA';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => {
+    speechActive = true;
+    updateStatus('يستمع للصوت...', 'recording-status');
+    const btn = document.getElementById('speechBtn');
+    btn.className = 'ctrl-btn ctrl-btn-danger';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4"/></svg> إيقاف الاستماع';
+    toast('🎙️ يستمع... تكلم الآن');
+  };
+
+  recognition.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    if (interim) document.getElementById('chatInput').value = interim;
+    if (final) {
+      document.getElementById('chatInput').value = final;
+      const autoSend = document.getElementById('toggleAutoSend')?.classList.contains('on');
+      if (autoSend) { sendMessage(); } else { document.getElementById('chatInput').focus(); }
+    }
+  };
+
+  recognition.onerror = (e) => {
+    if (e.error !== 'no-speech') toast('⚠️ خطأ في التعرف على الصوت: ' + e.error);
+  };
+
+  recognition.onend = () => {
+    if (speechActive) recognition.start(); // keep alive
+  };
+
+  recognition.start();
+}
+
+function stopSpeech() {
+  speechActive = false;
+  if (recognition) { recognition.onend = null; recognition.stop(); recognition = null; }
+  updateStatus(camActive ? 'الكاميرا تعمل' : 'في انتظار البدء', camActive ? 'connected' : 'disconnected');
+  const btn = document.getElementById('speechBtn');
+  btn.className = 'ctrl-btn ctrl-btn-default';
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4"/></svg> تحويل الصوت لنص';
+  toast('⏹️ توقف الاستماع');
+}
+
+// MIC button (push-to-talk)
+function toggleMic() {
+  const btn = document.getElementById('micBtn');
+  micActive = !micActive;
+  btn.classList.toggle('recording', micActive);
+  if (micActive) { startSpeech(); } else { stopSpeech(); }
+}
+
+// ══════════════════════════════════════
+//  CHAT
+// ══════════════════════════════════════
+function addMessage(text, side, type) {
+  if (!text.trim()) return;
+  const time = new Date().toLocaleTimeString('ar', { hour: '2-digit', minute: '2-digit' });
+  const typeLabel = { sign: 'إشارة', voice: 'صوت', text: 'نص' };
+  const typeClass = { sign: 'type-sign', voice: 'type-voice', text: 'type-text' };
+
+  const msg = { text, side, type, time };
+  chatLog.push(msg);
+
+  const el = document.createElement('div');
+  el.className = 'msg ' + (side === 'me' ? 'me' : 'them');
+  el.innerHTML = `
+    <div class="msg-bubble">${text}</div>
+    <div class="msg-meta">
+      <span>${side === 'me' ? (role === 'student' ? 'أنت' : 'الدكتور') : 'الطرف الآخر'}</span>
+      <span class="msg-type ${typeClass[type] || 'type-text'}">${typeLabel[type] || 'نص'}</span>
+      <span>${time}</span>
+    </div>`;
+  const msgs = document.getElementById('messages');
+  msgs.appendChild(el);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  // TTS for incoming messages if enabled
+  const tts = document.getElementById('toggleTTS')?.classList.contains('on');
+  if (side === 'them' && tts) speak(text);
+}
+
+function sendMessage() {
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  addMessage(text, 'me', speechActive ? 'voice' : 'text');
+  inp.value = '';
+  // simulate reply
+  setTimeout(() => {
+    const replies = [
+      'شكراً لك، هل هناك أي استفسار آخر؟',
+      'مفهوم! سأشرح هذه النقطة بتفصيل أكبر',
+      'سؤال ممتاز! الإجابة هي...',
+      'بالتأكيد، دعني أوضح هذا',
+      'أحسنت! هذا صحيح تماماً'
+    ];
+    addMessage(replies[Math.floor(Math.random()*replies.length)], 'them', 'text');
+  }, 1200 + Math.random()*800);
+}
+
+function clearChat() {
+  document.getElementById('messages').innerHTML = '';
+  chatLog = [];
+  toast('تم مسح المحادثة');
+}
+
+function speakLastMessage() {
+  const last = chatLog.filter(m => m.side === 'them').pop();
+  if (last) speak(last.text); else toast('لا توجد رسائل لقراءتها');
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ar-SA'; u.rate = .9; u.pitch = 1;
+  speechSynthesis.speak(u);
+}
+
+// ══════════════════════════════════════
+//  SESSION SAVE / END
+// ══════════════════════════════════════
+function saveConversation() {
+  if (!chatLog.length) { toast('لا توجد رسائل لحفظها'); return; }
+  const session = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('ar-SA'),
+    time: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }),
+    role,
+    messages: [...chatLog],
+    title: `جلسة ${role === 'student' ? 'طالب' : 'دكتور'} — ${new Date().toLocaleDateString('ar-SA')}`
+  };
+  sessions.unshift(session);
+  localStorage.setItem('nutq_sessions', JSON.stringify(sessions));
+  toast('✅ تم حفظ الجلسة');
+}
+
+function endSession() { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function confirmSaveEnd() { saveConversation(); confirmEnd(); }
+function confirmEnd() {
+  closeModal(); stopCamera(); stopSpeech();
+  clearChat(); toast('تم إنهاء الجلسة');
+}
+
+// ══════════════════════════════════════
+//  RECORDINGS
+// ══════════════════════════════════════
+function renderRecordings() {
+  const list = document.getElementById('recList');
+  if (!sessions.length) {
+    list.innerHTML = '<div style="color:var(--text3);text-align:center;padding:60px 0;font-size:.95rem">لا توجد محفوظات بعد — أنهِ جلسة وسيتم حفظها هنا</div>';
+    return;
+  }
+  list.innerHTML = sessions.map((s, i) => `
+    <div class="rec-item">
+      <div class="rec-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--c3)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 12h6M9 16h4"/></svg>
+      </div>
+      <div class="rec-info">
+        <div class="rec-title">${s.title}</div>
+        <div class="rec-meta">${s.date} — ${s.time} — ${s.messages.length} رسالة</div>
+        <div class="rec-text-preview">${s.messages.slice(-2).map(m=>`<b>${m.side==='me'?'أنت':'الطرف الآخر'}:</b> ${m.text}`).join('<br>')}</div>
+      </div>
+      <div class="rec-actions">
+        <button class="icon-btn" title="قراءة" onclick="speakSession(${i})">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19 11,5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
+        </button>
+        <button class="icon-btn" title="حذف" onclick="deleteSession(${i})" style="color:var(--red)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+function speakSession(i) {
+  const msgs = sessions[i].messages.map(m => m.text).join('. ');
+  speak(msgs);
+}
+
+function deleteSession(i) {
+  sessions.splice(i, 1);
+  localStorage.setItem('nutq_sessions', JSON.stringify(sessions));
+  renderRecordings(); toast('تم حذف الجلسة');
+}
+
+// ══════════════════════════════════════
+//  DICTIONARY
+// ══════════════════════════════════════
+const dictData = [
+  { word:'مرحبا', cat:'greetings', color:'#3d8f8f' },
+  { word:'شكراً', cat:'greetings', color:'#2d6e6e' },
+  { word:'السلام عليكم', cat:'greetings', color:'#1a3d3d' },
+  { word:'مع السلامة', cat:'greetings', color:'#3d8f8f' },
+  { word:'واحد', cat:'numbers', color:'#2a6496' },
+  { word:'اثنان', cat:'numbers', color:'#2a6496' },
+  { word:'ثلاثة', cat:'numbers', color:'#2a6496' },
+  { word:'أربعة', cat:'numbers', color:'#2a6496' },
+  { word:'خمسة', cat:'numbers', color:'#2a6496' },
+  { word:'أ', cat:'letters', color:'#5aadad' },
+  { word:'ب', cat:'letters', color:'#5aadad' },
+  { word:'ت', cat:'letters', color:'#5aadad' },
+  { word:'ث', cat:'letters', color:'#5aadad' },
+  { word:'ج', cat:'letters', color:'#5aadad' },
+  { word:'أستاذ', cat:'education', color:'#3d8f8f' },
+  { word:'كتاب', cat:'education', color:'#3d8f8f' },
+  { word:'جامعة', cat:'education', color:'#3d8f8f' },
+  { word:'امتحان', cat:'education', color:'#2d6e6e' },
+  { word:'درس', cat:'education', color:'#2d6e6e' },
+  { word:'سؤال', cat:'education', color:'#3d8f8f' },
+  { word:'سعيد', cat:'emotions', color:'#38a169' },
+  { word:'حزين', cat:'emotions', color:'#2a6496' },
+  { word:'غاضب', cat:'emotions', color:'#e05252' },
+  { word:'خائف', cat:'emotions', color:'#d97706' },
+  { word:'تعب', cat:'emotions', color:'#7aa0a0' },
+  { word:'ماء', cat:'daily', color:'#2a6496' },
+  { word:'طعام', cat:'daily', color:'#3d8f8f' },
+  { word:'بيت', cat:'daily', color:'#2d6e6e' },
+  { word:'مدرسة', cat:'daily', color:'#3d8f8f' },
+  { word:'مستشفى', cat:'daily', color:'#e05252' },
+];
+
+let dictCat = 'all';
+function renderDict() {
+  const search = document.getElementById('dictSearch')?.value?.toLowerCase() || '';
+  const filtered = dictData.filter(d =>
+    (dictCat === 'all' || d.cat === dictCat) &&
+    d.word.includes(search)
+  );
+  document.getElementById('dictGrid').innerHTML = filtered.map(d => `
+    <div class="dict-card" onclick="playDictWord('${d.word}')">
+      <button class="dict-play" onclick="event.stopPropagation();playDictWord('${d.word}')">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>
+      </button>
+      <div class="dict-hand-area">
+        ${handSVG(d.color)}
+      </div>
+      <div class="dict-word-ar">${d.word}</div>
+      <div class="dict-cat-tag">${catName(d.cat)}</div>
+    </div>`).join('');
+}
+
+function handSVG(c) {
+  const r = Math.floor(Math.random()*4);
+  const hands = [
+    `<svg viewBox="0 0 52 52" fill="none"><rect x="10" y="18" width="18" height="24" rx="5" fill="${c}"/><rect x="4" y="22" width="8" height="14" rx="4" fill="${c}"/><rect x="14" y="7" width="7" height="15" rx="3.5" fill="${c}" opacity=".85"/><rect x="22" y="6" width="7" height="17" rx="3.5" fill="${c}" opacity=".85"/><rect x="30" y="9" width="6" height="13" rx="3" fill="${c}" opacity=".6"/><path d="M38 22 Q44 27 38 33" stroke="${c}" stroke-width="3" stroke-linecap="round" fill="none"/></svg>`,
+    `<svg viewBox="0 0 52 52" fill="none"><rect x="12" y="20" width="16" height="22" rx="5" fill="${c}"/><rect x="6" y="24" width="8" height="12" rx="4" fill="${c}"/><rect x="16" y="9" width="6" height="14" rx="3" fill="${c}"/><rect x="23" y="8" width="6" height="16" rx="3" fill="${c}" opacity=".8"/><rect x="30" y="12" width="5" height="12" rx="2.5" fill="${c}" opacity=".55"/><rect x="36" y="15" width="4" height="10" rx="2" fill="${c}" opacity=".4"/></svg>`,
+    `<svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="28" r="14" fill="none" stroke="${c}" stroke-width="3.5"/><path d="M20 28 L32 28 M26 22 L26 34" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    `<svg viewBox="0 0 52 52" fill="none"><rect x="11" y="19" width="17" height="23" rx="5" fill="${c}"/><rect x="5" y="23" width="8" height="13" rx="4" fill="${c}"/><rect x="15" y="8" width="6" height="14" rx="3" fill="${c}"/><rect x="22" y="7" width="6" height="16" rx="3" fill="${c}" opacity=".8"/><rect x="29" y="11" width="5" height="12" rx="2.5" fill="${c}" opacity=".55"/><path d="M36 20 Q41 25 36 30" stroke="${c}" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".7"/></svg>`,
+  ];
+  return hands[r];
+}
+
+function catName(c) {
+  return { greetings:'تحيات', numbers:'أرقام', letters:'حروف', education:'تعليم', emotions:'مشاعر', daily:'يومي' }[c] || c;
+}
+
+function filterDictCat(cat, btn) {
+  dictCat = cat;
+  document.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDict();
+}
+
+function filterDict() { renderDict(); }
+
+function playDictWord(word) {
+  speak(word);
+  toast('🔊 ' + word);
+}
+
+// ══════════════════════════════════════
+//  QUIZ
+// ══════════════════════════════════════
+const quizData = [
+  { question:'ما هذه الإشارة؟', answer:'مرحبا', options:['شكراً','مرحبا','أستاذ','السلام'], cat:'greetings' },
+  { question:'أي إشارة تعني "شكراً"؟', answer:'شكراً', options:['مرحبا','شكراً','تعب','واحد'], cat:'greetings' },
+  { question:'ما هذه الإشارة؟', answer:'أستاذ', options:['كتاب','امتحان','أستاذ','درس'], cat:'education' },
+  { question:'ما هذه الإشارة؟', answer:'سعيد', options:['حزين','غاضب','سعيد','تعب'], cat:'emotions' },
+  { question:'ما هذه الإشارة؟', answer:'واحد', options:['اثنان','خمسة','واحد','ثلاثة'], cat:'numbers' },
+  { question:'أي إشارة تعني "جامعة"؟', answer:'جامعة', options:['بيت','جامعة','مستشفى','مدرسة'], cat:'education' },
+  { question:'ما هذه الإشارة؟', answer:'ماء', options:['طعام','ماء','بيت','أ'], cat:'daily' },
+  { question:'أي إشارة تعني "كتاب"؟', answer:'كتاب', options:['كتاب','قلم','درس','سؤال'], cat:'education' },
+  { question:'ما هذه الإشارة؟', answer:'خمسة', options:['واحد','ثلاثة','أربعة','خمسة'], cat:'numbers' },
+  { question:'ما هذه الإشارة؟', answer:'مع السلامة', options:['مرحبا','مع السلامة','شكراً','تعب'], cat:'greetings' },
+];
+
+function startQuiz() {
+  quizIndex = 0; quizScore = 0; quizAnswered = false;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const pct = (quizIndex / quizData.length) * 100;
+  document.getElementById('quizProgress').style.width = pct + '%';
+
+  if (quizIndex >= quizData.length) {
+    document.getElementById('quizContent').innerHTML = `
+      <div class="quiz-card"><div class="quiz-result">
+        <div class="quiz-score">${quizScore}/${quizData.length}</div>
+        <div class="quiz-score-label">نتيجتك في الاختبار</div>
+        <div style="margin-top:24px;padding:20px;background:var(--c7);border-radius:16px;">
+          <div style="font-size:1.1rem;font-weight:700;color:var(--c2)">${quizScore>=8?'🏆 ممتاز!':quizScore>=6?'👍 جيد!':quizScore>=4?'💪 استمر في التعلم':'📚 راجع القاموس وأعد المحاولة'}</div>
+          <div style="color:var(--text2);margin-top:8px;font-size:.9rem">نسبة النجاح: ${Math.round((quizScore/quizData.length)*100)}%</div>
+        </div>
+        <button class="ctrl-btn ctrl-btn-primary" style="margin-top:24px;font-size:1rem" onclick="startQuiz()">إعادة الاختبار</button>
+      </div></div>`;
+    document.getElementById('quizCounter').textContent = 'انتهى الاختبار';
+    return;
+  }
+
+  const q = quizData[quizIndex];
+  const d = dictData.find(x => x.word === q.answer) || { color: '#3d8f8f' };
+  document.getElementById('quizCounter').textContent = `سؤال ${quizIndex+1} من ${quizData.length}`;
+  document.getElementById('quizContent').innerHTML = `
+    <div class="quiz-card">
+      <div class="quiz-question">${q.question}</div>
+      <div class="quiz-hand-display">${handSVG(d.color)}</div>
+      <div class="quiz-options">
+        ${q.options.map(opt => `<button class="quiz-opt" onclick="answerQuiz('${opt}','${q.answer}',this)">${opt}</button>`).join('')}
+      </div>
+    </div>`;
+  quizAnswered = false;
+}
+
+function answerQuiz(chosen, correct, btn) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const isCorrect = chosen === correct;
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) {
+    document.querySelectorAll('.quiz-opt').forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+  }
+  if (isCorrect) quizScore++;
+  toast(isCorrect ? '✅ إجابة صحيحة!' : `❌ الإجابة الصحيحة: ${correct}`);
+  setTimeout(() => { quizIndex++; renderQuiz(); }, 1600);
+}
+
+// ══════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════
+function toggleSetting(el) { el.classList.toggle('on'); }
+function updateName() {
+  document.getElementById('userName').textContent = document.getElementById('settingName').value;
+}
+
+// ══════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function updateStatus(text, type) {
+  document.getElementById('statusText').textContent = text;
+  const dot = document.getElementById('statusDot');
+  dot.className = 'status-dot ' + type;
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+renderDict();
+</script>
+</body>
+</html>
